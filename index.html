@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SHANTI</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://raw.githubusercontent.com/sumberdayaalam65-svg/SHANTI/main/LogoSHANTI.png"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f9fafb;
+        color: #1f2937;
+      }
+      h1,
+      h2,
+      h3 {
+        font-family: "Poppins", sans-serif;
+      }
+      .fade-in {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s ease-out;
+      }
+      .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        transition: all 0.3s ease;
+      }
+      #scrollTop {
+        display: none;
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background-color: #ffd200;
+        color: #004080;
+        padding: 0.75rem;
+        border-radius: 9999px;
+        cursor: pointer;
+        z-index: 50;
+      }
+      #scrollTop:hover {
+        background-color: #e6c200;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Scroll to Top -->
+    <div id="scrollTop" aria-label="Kembali ke atas">&#8679;</div>
+
+    <!-- Navbar -->
+    <nav class="fixed w-full bg-[#004080] shadow-md z-40">
+      <div
+        class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4"
+      >
+        <!-- Logo + Teks -->
+        <div class="flex items-center space-x-3">
+          <img
+            src="https://raw.githubusercontent.com/sumberdayaalam65-svg/SHANTI/main/LogoPutih.png"
+            alt="Logo SHANTI"
+            style="width: 55px; height: 55px; object-fit: contain"
+          />
+
+          <span class="font-bold text-lg text-white"></span>
+        </div>
+
+        <!-- Menu Desktop -->
+        <ul class="hidden md:flex space-x-8 font-medium text-white">
+          <li>
+            <a href="#beranda" class="hover:text-[#ffd200] transition"
+              >Beranda</a
+            >
+          </li>
+          <li>
+            <a href="#tentang" class="hover:text-[#ffd200] transition"
+              >Tentang</a
+            >
+          </li>
+          <li>
+            <a href="#layanan" class="hover:text-[#ffd200] transition"
+              >Layanan</a
+            >
+          </li>
+        </ul>
+
+        <!-- Tombol Menu Mobile -->
+        <button
+          id="menuBtn"
+          class="md:hidden text-white text-2xl focus:outline-none"
+        >
+          ☰
+        </button>
+      </div>
+
+      <!-- Menu Mobile -->
+      <ul
+        id="mobileMenu"
+        class="hidden flex-col space-y-4 bg-[#004080] text-white p-6 md:hidden"
+      >
+        <li>
+          <a href="#beranda" class="hover:text-[#ffd200] transition">Beranda</a>
+        </li>
+        <li>
+          <a href="#tentang" class="hover:text-[#ffd200] transition">Tentang</a>
+        </li>
+        <li>
+          <a href="#layanan" class="hover:text-[#ffd200] transition">Layanan</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Hero -->
+    <section
+      id="beranda"
+      class="relative min-h-[70vh] md:min-h-screen flex items-center justify-center text-white bg-[url('https://raw.githubusercontent.com/sumberdayaalam65-svg/SHANTI/main/hero.jpg')] bg-cover bg-center"
+    >
+      <!-- Overlay biru -->
+      <div class="absolute inset-0 bg-[#004080]/70"></div>
+
+      <div class="relative max-w-5xl mx-auto px-6 text-center fade-in z-10">
+        <h1 class="text-4xl md:text-6xl font-bold mb-4">SHANTI</h1>
+        <p class="text-lg md:text-xl mb-6 max-w-2xl mx-auto">
+          Sistem Harmonisasi Arsip Notulensi Terintegrasi
+        </p>
+        <div class="flex gap-4 flex-wrap justify-center">
+          <a
+            href="#layanan"
+            class="bg-[#ffd200] text-[#004080] px-6 py-3 rounded-lg font-semibold hover:scale-105 transition shadow-md"
+            >Pelajari Layanan</a
+          >
+          <a
+            href="#tentang"
+            class="border border-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-[#004080] transition"
+            >Tentang Kami</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- Tentang -->
+    <section id="tentang" class="px-6 py-20 fade-in">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold mb-6 text-[#004080] text-center">
+          Tentang SHANTI
+        </h2>
+        <p class="text-gray-700 leading-relaxed text-center">
+          Selamat datang di <strong>SHANTI</strong> (Sistem Harmonisasi Arsip
+          Notulensi Terintegrasi). SHANTI adalah inovasi digital yang
+          dikembangkan oleh Bagian Sumber Daya Alam Sekretariat Daerah Kabupaten
+          Sikka untuk mewujudkan optimalisasi penyimpanan dan pengelolaan
+          dokumentasi kegiatan koordinasi yang mendukung prinsip transparan,
+          tertata, dan mudah diakses.
+        </p>
+      </div>
+    </section>
+
+    <!-- Layanan -->
+    <section id="layanan" class="px-6 py-20 bg-gray-50 fade-in">
+      <div class="max-w-6xl mx-auto text-center mb-12">
+        <h2 class="text-3xl font-bold text-[#004080]">Layanan Utama</h2>
+        <p class="text-gray-600 mt-3 max-w-2xl mx-auto">
+          Tiga fitur utama SHANTI untuk mendukung pengelolaan arsip, koordinasi,
+          dan panduan penggunaan.
+        </p>
+      </div>
+
+      <div class="max-w-6xl mx-auto grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+        <!-- Administrator -->
+        <div
+          class="card bg-white rounded-xl shadow-lg p-8 text-center flex flex-col items-center hover:shadow-2xl hover:scale-105 transition"
+        >
+          <div class="bg-[#e6f0ff] rounded-full p-4 mb-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-12 w-12 text-[#004080]"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 
+                   1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 
+                   1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+              />
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Administrator</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Akses penuh untuk mengelola sistem, data, dan pengguna.
+          </p>
+          <a
+            href="login.html"
+            class="mt-4 bg-[#ffd200] text-[#004080] px-4 py-2 rounded-lg font-semibold hover:bg-[#e6c200] transition"
+            >Masuk</a
+          >
+        </div>
+
+        <!-- Sub Bidang -->
+        <div
+          class="card bg-white rounded-xl shadow-lg p-8 text-center flex flex-col items-center hover:shadow-2xl hover:scale-105 transition"
+        >
+          <div class="bg-[#e6f0ff] rounded-full p-4 mb-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-12 w-12 text-[#004080]"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 7h18M3 12h18M3 17h18"
+              />
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Sub Bidang</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Pengelolaan layanan sesuai bidang masing-masing secara terstruktur.
+          </p>
+          <a
+            href="lihatdata.html"
+            class="mt-4 bg-[#ffd200] text-[#004080] px-4 py-2 rounded-lg font-semibold hover:bg-[#e6c200] transition"
+            >Lihat Data</a
+          >
+        </div>
+
+        <!-- Panduan Pengguna -->
+        <div
+          class="card bg-white rounded-xl shadow-lg p-8 text-center flex flex-col items-center hover:shadow-2xl hover:scale-105 transition"
+        >
+          <div class="bg-[#e6f0ff] rounded-full p-4 mb-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-12 w-12 text-[#004080]"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 20h9M12 4H3m9 16V4m0 16l-3-3m3 3l3-3"
+              />
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Panduan Pengguna</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Petunjuk lengkap penggunaan sistem bagi pengguna baru maupun lama.
+          </p>
+          <a
+            href="https://drive.google.com/file/d/18cW1_pDRqHymRFNH7vzgXPOW_Kk31LEy/view?usp=sharing"
+            class="mt-4 bg-[#ffd200] text-[#004080] px-4 py-2 rounded-lg font-semibold hover:bg-[#e6c200] transition"
+            >Lihat Panduan</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer (versi lama, tahun otomatis) -->
+    <footer class="bg-[#004080] text-white py-6 text-center fade-in">
+      <p>&copy; <span id="year"></span> SHANTI. Semua Hak Dilindungi.</p>
+    </footer>
+
+    <script>
+      // isi span#year dengan tahun saat ini
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+
+    <script>
+      // 🚀 Auto-redirect jika sudah login
+      if (localStorage.getItem("loggedIn") === "true") {
+        window.location.href = "dashboard.html";
+      }
+
+      // Fade-in
+      const faders = document.querySelectorAll(".fade-in");
+      const appearOptions = { threshold: 0.2 };
+      const appearOnScroll = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        });
+      }, appearOptions);
+      faders.forEach((fader) => appearOnScroll.observe(fader));
+
+      // Scroll-to-top
+      const scrollBtn = document.getElementById("scrollTop");
+      window.addEventListener("scroll", () => {
+        scrollBtn.style.display = window.scrollY > 300 ? "block" : "none";
+      });
+      scrollBtn.addEventListener("click", () =>
+        window.scrollTo({ top: 0, behavior: "smooth" })
+      );
+
+      // Toggle mobile menu
+      const menuBtn = document.getElementById("menuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
+      menuBtn.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+      });
+    </script>
+  </body>
+</html>

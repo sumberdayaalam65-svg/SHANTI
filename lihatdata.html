@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>SANTI - Daftar Dokumen</title>
+    <link rel="icon" type="image/png" href="LogoSHANTI.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://raw.githubusercontent.com/sumberdayaalam65-svg/SHANTI/main/LogoSHANTI.png"
+    />
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  </head>
+  <body class="bg-gray-100 flex flex-col min-h-screen">
+    <!-- Header -->
+    <header class="bg-[#004080] text-white py-4 shadow sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+        <h1 class="text-lg sm:text-2xl font-bold flex items-center gap-2">
+          SHANTI - Daftar Dokumen
+        </h1>
+        <a
+          href="index.html"
+          class="bg-[#ffd200] text-[#004080] px-3 sm:px-4 py-2 rounded font-semibold hover:bg-[#e6c200] transition text-sm sm:text-base"
+        >
+          Beranda
+        </a>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="p-6 flex-grow">
+      <div class="bg-white p-4 rounded-xl shadow space-y-4">
+        <!-- Filter -->
+        <div class="flex flex-col sm:flex-row justify-end gap-2 items-center">
+          <label for="categoryFilter" class="text-sm text-gray-600"
+            >Pilih Kategori:</label
+          >
+          <select
+            id="categoryFilter"
+            class="border border-gray-300 bg-white rounded px-3 py-2 text-sm focus:ring-2 focus:ring-[#004080] focus:outline-none"
+          >
+            <option value="">-- Pilih --</option>
+            <option value="1HxACsNAI6VBEyhVB5YnRKW5528_eWZzI">
+              Energi & Air
+            </option>
+            <option value="1L--Xu3ZOAm5W6vZG2KJv43zscY65_R3q">
+              Pertambangan dan Lingkungan Hidup
+            </option>
+            <option value="1tCgP6ChkbNxou0AvWplxZDeEMER4hXoG">
+              Lingkungan, Pertanian, Kehutanan & Kelautan
+            </option>
+          </select>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading" class="hidden text-center py-4">
+          <div class="inline-flex items-center gap-2 text-gray-600">
+            <svg
+              class="animate-spin h-5 w-5 text-[#004080]"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+              ></path>
+            </svg>
+            <span>Memuat data...</span>
+          </div>
+        </div>
+
+        <!-- Error -->
+        <div
+          id="errorBox"
+          class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-sm"
+        ></div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto text-xs sm:text-sm">
+          <table id="dokumenTable" class="display stripe hover w-full">
+            <thead>
+              <tr class="bg-[#004080] text-white">
+                <th>No</th>
+                <th>Nama File</th>
+                <th>Jenis</th>
+                <th>Ukuran</th>
+                <th>Terakhir Update</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer
+      class="bg-[#004080] text-white py-4 text-center text-xs sm:text-sm mt-auto"
+    >
+      <p>&copy; <span id="year"></span> SHANTI Admin. Semua Hak Dilindungi.</p>
+    </footer>
+
+    <!-- Script -->
+    <script>
+      // Kalau sudah login, langsung ke dashboard
+      if (localStorage.getItem("loggedIn") === "true") {
+        window.location.href = "dashboard.html";
+      }
+      // Kalau belum login → tidak ada redirect, tetap di halaman ini
+      let table;
+      // URL API Google Apps Script
+      const apiBase =
+        "https://script.google.com/macros/s/AKfycbx2K0D2d4ORN1gkH8DzSTl4hZqOBxly-ZL16VCCb8PxfFgeNnc81Gt81xp_E0-O3YyrRw/exec";
+
+      $(document).ready(function () {
+        table = $("#dokumenTable").DataTable({
+          responsive: true,
+          language: {
+            search: "Cari:",
+            lengthMenu: "Tampilkan _MENU_ entri",
+            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+            emptyTable: "Tidak ada data tersedia",
+            paginate: {
+              first: "Awal",
+              last: "Akhir",
+              next: "Berikutnya",
+              previous: "Sebelumnya",
+            },
+          },
+          createdRow: function (row, data, dataIndex) {
+            if (dataIndex % 2 === 0) {
+              $(row).addClass("bg-gray-50");
+            }
+          },
+          columnDefs: [
+            { targets: 1, width: "40%" }, // Lebar kolom Nama File
+            { targets: 5, orderable: false }, // Kolom Aksi tidak perlu sorting
+          ],
+        });
+
+        $("#categoryFilter").on("change", async function () {
+          const folderId = $(this).val();
+          $("#errorBox").addClass("hidden").text("");
+
+          if (!folderId) {
+            table.clear().draw();
+            return;
+          }
+
+          $("#loading").removeClass("hidden");
+          $("#categoryFilter").prop("disabled", true);
+
+          try {
+            const response = await fetch(`${apiBase}?folderId=${folderId}`);
+            const data = await response.json();
+            loadTable(data);
+          } catch (err) {
+            $("#errorBox")
+              .removeClass("hidden")
+              .text("Gagal mengambil data: " + err);
+          } finally {
+            $("#loading").addClass("hidden");
+            $("#categoryFilter").prop("disabled", false);
+          }
+        });
+      });
+
+      function loadTable(data) {
+        table.clear();
+        data.forEach((row) => {
+          table.row.add([
+            row.no,
+            row.name,
+            row.type,
+            row.size,
+            new Date(row.updated).toLocaleString(),
+            `
+          <div class="flex gap-2">
+            <a href="${row.previewUrl}" target="_blank" 
+               class="px-2 py-1 rounded bg-blue-100 text-blue-700 hover:bg-blue-200 text-xs">Preview</a>
+            <a href="${row.downloadUrl}" target="_blank" 
+               class="px-2 py-1 rounded bg-green-100 text-green-700 hover:bg-green-200 text-xs">Download</a>
+          </div>
+        `,
+          ]);
+        });
+        table.draw();
+      }
+
+      // Tahun otomatis di footer
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

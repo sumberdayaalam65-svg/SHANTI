@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Dashboard - SHANTI</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://raw.githubusercontent.com/sumberdayaalam65-svg/SHANTI/main/LogoSHANTI.png"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background: #f5f7fa;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      h1,
+      h2,
+      h3 {
+        font-family: "Poppins", sans-serif;
+      }
+      main {
+        flex: 1;
+      }
+      /* 🔹 Animasi fade-in & fade-out */
+      .fade-enter {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      .fade-enter-active {
+        opacity: 1;
+        transform: scale(1);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+      .fade-exit {
+        opacity: 1;
+        transform: scale(1);
+      }
+      .fade-exit-active {
+        opacity: 0;
+        transform: scale(0.95);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="bg-[#004080] text-white shadow">
+      <div
+        class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4"
+      >
+        <h1 class="text-2xl font-bold">SHANTI Admin</h1>
+        <div class="flex items-center space-x-4">
+          <!-- Nama user -->
+          <span class="text-sm md:text-base" id="userWelcome">Halo, User</span>
+          <button
+            onclick="logout()"
+            class="bg-[#ffd200] text-[#004080] px-4 py-2 rounded font-semibold hover:bg-[#e6c200] transition"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+      <!-- Card Dokumen & File -->
+      <div
+        class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition flex flex-col md:flex-row items-start md:items-center justify-between space-y-4 md:space-y-0 md:space-x-6"
+      >
+        <div class="flex-1">
+          <h2 class="text-xl font-semibold text-[#004080] mb-2">
+            Dokumen & File
+          </h2>
+          <p class="text-gray-500 mb-2">
+            Klik tombol untuk membuka folder Google Drive terkait data SHANTI.
+          </p>
+          <div class="flex flex-wrap items-center gap-2">
+            <span
+              class="bg-[#004080] text-white px-3 py-1 rounded-full text-sm"
+              id="fileCount"
+              >Memuat...</span
+            >
+            <span class="text-gray-500 text-sm" id="lastUpdate"
+              >Terakhir update: -</span
+            >
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-3 mt-2 md:mt-0">
+          <a
+            href="https://drive.google.com/drive/folders/17NwZvdEoRL2XpqVY2SVJia3c7xlVdVrW?usp=sharing"
+            target="_blank"
+            class="bg-[#ffd200] text-[#004080] px-6 py-3 rounded font-semibold hover:bg-[#e6c200] transition"
+          >
+            Buka Google Drive
+          </a>
+          <button
+            id="reloadBtn"
+            class="bg-[#004080] text-white px-4 py-3 rounded font-semibold hover:bg-[#003366] transition"
+          >
+            Reload
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer
+      class="bg-[#004080] text-white py-4 text-center text-xs sm:text-sm mt-auto"
+    >
+      <p>&copy; <span id="year"></span> SHANTI Admin. Semua Hak Dilindungi.</p>
+    </footer>
+
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+
+    <!-- 🔹 Popup Konfirmasi Logout -->
+    <div
+      id="logoutToast"
+      class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center hidden"
+    >
+      <div
+        id="logoutBox"
+        class="bg-white border border-gray-200 shadow-xl rounded-xl p-6 w-80 fade-enter"
+      >
+        <p class="text-gray-800 font-semibold mb-4 text-center">
+          Yakin ingin logout?
+        </p>
+        <div class="flex justify-center gap-4">
+          <button
+            onclick="confirmLogout()"
+            class="bg-[#004080] text-white px-4 py-2 rounded font-semibold hover:bg-[#003366] transition"
+          >
+            Ya
+          </button>
+          <button
+            onclick="cancelLogout()"
+            class="bg-gray-300 text-gray-700 px-4 py-2 rounded font-semibold hover:bg-gray-400 transition"
+          >
+            Tidak
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 🔹 URL Web App dari GAS
+      const GAS_URL =
+        "https://script.google.com/macros/s/AKfycbyY_y_BVfCMRKM04qu00BC-AQexxDAWoqnwRbSx7DZBDnWKtPhGT60zIu5w4-whzx8qNg/exec";
+
+      // 🔹 Ambil data user dari localStorage
+      const isLoggedIn = localStorage.getItem("loggedIn");
+      const username = localStorage.getItem("username") || "User";
+      const role = localStorage.getItem("role") || "";
+
+      if (!isLoggedIn || isLoggedIn !== "true") {
+        window.location.href = "login.html";
+      } else {
+        document.getElementById("userWelcome").textContent = role
+          ? `Halo, ${username} (${role})`
+          : `Halo, ${username}`;
+      }
+
+      // 🔹 Fungsi ambil data dari GAS
+      async function loadData() {
+        try {
+          const res = await fetch(GAS_URL);
+          const data = await res.json();
+
+          document.getElementById(
+            "fileCount"
+          ).textContent = `${data.pdfCount} File`;
+          document.getElementById(
+            "lastUpdate"
+          ).textContent = `Terakhir update: ${data.lastUpdate}`;
+        } catch (err) {
+          document.getElementById("fileCount").textContent =
+            "Gagal memuat data";
+          document.getElementById("lastUpdate").textContent =
+            "Terakhir update: -";
+          console.error("Error:", err);
+        }
+      }
+
+      // 🔄 Event listener tombol Reload
+      document.getElementById("reloadBtn").addEventListener("click", () => {
+        document.getElementById("fileCount").textContent = "Memuat...";
+        document.getElementById("lastUpdate").textContent =
+          "Terakhir update: ...";
+        loadData();
+      });
+
+      // 🚀 Load data pertama kali
+      loadData();
+
+      // 🚪 Tampilkan popup konfirmasi logout
+      function logout() {
+        const toast = document.getElementById("logoutToast");
+        const box = document.getElementById("logoutBox");
+
+        toast.classList.remove("hidden");
+        box.classList.remove("fade-exit", "fade-exit-active");
+        box.classList.add("fade-enter");
+        setTimeout(() => box.classList.add("fade-enter-active"), 10);
+      }
+
+      // ✅ Konfirmasi logout
+      function confirmLogout() {
+        localStorage.clear();
+        window.location.href = "login.html";
+      }
+
+      // ❌ Batal logout
+      function cancelLogout() {
+        const box = document.getElementById("logoutBox");
+        box.classList.remove("fade-enter", "fade-enter-active");
+        box.classList.add("fade-exit");
+        setTimeout(() => {
+          box.classList.add("fade-exit-active");
+          setTimeout(() => {
+            document.getElementById("logoutToast").classList.add("hidden");
+            box.classList.remove("fade-exit", "fade-exit-active");
+          }, 200);
+        }, 10);
+      }
+    </script>
+  </body>
+</html>
